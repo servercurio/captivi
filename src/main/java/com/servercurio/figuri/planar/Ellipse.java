@@ -1,8 +1,8 @@
 /*
  *
- * File:		Shape.java
- * Class:		com.servercurio.figuri.planar.Shape
- * Modified:	3/28/18 10:43 PM
+ * File:		Ellipse.java
+ * Class:		com.servercurio.figuri.planar.Ellipse
+ * Modified:	4/3/18 6:50 PM
  *
  * Copyright 2018 Server Curio
  *
@@ -22,18 +22,21 @@
 
 package com.servercurio.figuri.planar;
 
-import java.io.Serializable;
+import java.awt.geom.Ellipse2D;
 
-public interface Shape extends Serializable {
+public class Ellipse extends Rectangle {
 
-    boolean contains(final double x, final double y);
+    private static final long serialVersionUID = -7892652994176565961L;
 
-    boolean contains(final Point point);
+    public Ellipse() {
+    }
 
-    boolean contains(final double x, final double y, final double w, final double h);
+    public Ellipse(final double width, final double height) {
+        super(width, height);
+    }
 
-    boolean contains(final Rectangle rectangle);
-
-    Rectangle getBounds();
+    public Ellipse(final double x, final double y, final double width, final double height) {
+        super(x, y, width, height);
+    }
 
 }

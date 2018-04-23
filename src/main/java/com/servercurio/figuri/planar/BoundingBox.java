@@ -1,8 +1,8 @@
 /*
  *
- * File:		Shape.java
- * Class:		com.servercurio.figuri.planar.Shape
- * Modified:	3/28/18 10:43 PM
+ * File:		BoundingBox.java
+ * Class:		com.servercurio.figuri.planar.BoundingBox
+ * Modified:	4/3/18 6:48 PM
  *
  * Copyright 2018 Server Curio
  *
@@ -22,18 +22,17 @@
 
 package com.servercurio.figuri.planar;
 
-import java.io.Serializable;
+public class BoundingBox extends Rectangle {
 
-public interface Shape extends Serializable {
+    public BoundingBox() {
+    }
 
-    boolean contains(final double x, final double y);
+    public BoundingBox(final double width, final double height) {
+        super(width, height);
+    }
 
-    boolean contains(final Point point);
-
-    boolean contains(final double x, final double y, final double w, final double h);
-
-    boolean contains(final Rectangle rectangle);
-
-    Rectangle getBounds();
+    public BoundingBox(final double x, final double y, final double width, final double height) {
+        super(x, y, width, height);
+    }
 
 }

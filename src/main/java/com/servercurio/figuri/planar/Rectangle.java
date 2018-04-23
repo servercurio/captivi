@@ -25,11 +25,15 @@ package com.servercurio.figuri.planar;
 import com.servercurio.comune.util.CompareToBuilder;
 import com.servercurio.comune.util.Copyable;
 import com.servercurio.comune.util.EqualityBuilder;
+import com.servercurio.figuri.Dimension;
 
-import java.io.Serializable;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Objects;
 
-public class Rectangle implements Serializable, Comparable<Rectangle>, Copyable<Rectangle> {
+public class Rectangle implements Shape, Comparable<Rectangle>, Copyable<Rectangle> {
+
+    private static final long serialVersionUID = 4815557825521106169L;
 
     private double x;
     private double y;
@@ -40,11 +44,11 @@ public class Rectangle implements Serializable, Comparable<Rectangle>, Copyable<
         this(0, 0, 0, 0);
     }
 
-    public Rectangle(double width, double height) {
+    public Rectangle(final double width, final double height) {
         this(0, 0, width, height);
     }
 
-    public Rectangle(double x, double y, double width, double height) {
+    public Rectangle(final double x, final double y, final double width, final double height) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -55,7 +59,7 @@ public class Rectangle implements Serializable, Comparable<Rectangle>, Copyable<
         return x;
     }
 
-    public void setX(double x) {
+    public void setX(final double x) {
         this.x = x;
     }
 
@@ -63,7 +67,7 @@ public class Rectangle implements Serializable, Comparable<Rectangle>, Copyable<
         return y;
     }
 
-    public void setY(double y) {
+    public void setY(final double y) {
         this.y = y;
     }
 
@@ -71,7 +75,7 @@ public class Rectangle implements Serializable, Comparable<Rectangle>, Copyable<
         return width;
     }
 
-    public void setWidth(double width) {
+    public void setWidth(final double width) {
         this.width = width;
     }
 
@@ -79,13 +83,80 @@ public class Rectangle implements Serializable, Comparable<Rectangle>, Copyable<
         return height;
     }
 
-    public void setHeight(double height) {
+    public void setHeight(final double height) {
         this.height = height;
+    }
+
+    public Dimension getSize() {
+        return new Dimension(width, height);
+    }
+
+    public void setSize(final Dimension dimension) {
+        if (dimension == null) {
+            throw new NullPointerException("dimension");
+        }
+
+        setSize(dimension.getWidth(), dimension.getHeight());
+    }
+
+    public void setSize(final double width, final double height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    public Point getLocation() {
+        return new Point(x, y);
+    }
+
+    public void setLocation(final Point point) {
+        if (point == null) {
+            throw new NullPointerException("point");
+        }
+
+        setLocation(point.getX(), point.getY());
+    }
+
+    public void setLocation(final double x, final double y) {
+        this.x = x;
+        this.y = y;
     }
 
 
     @Override
-    public void copyTo(Rectangle other) {
+    public boolean contains(final double x, final double y) {
+        return new Rectangle2D.Double(this.x, this.y, this.width, this.height).contains(x, y);
+    }
+
+    @Override
+    public boolean contains(final Point point) {
+        if (point == null) {
+            throw new NullPointerException("point");
+        }
+
+        return contains(point.getX(), point.getY());
+    }
+
+    @Override
+    public boolean contains(final double x, final double y, final double w, final double h) {
+        return new Rectangle2D.Double(this.x, this.y, this.width, this.height).contains(x, y, w, h);
+    }
+
+    @Override
+    public boolean contains(final Rectangle rectangle) {
+        if (rectangle == null) {
+            throw new NullPointerException("rectangle");
+        }
+
+        return contains(rectangle.getX(), rectangle.getY(), rectangle.getWidth(), rectangle.getHeight());
+    }
+
+    @Override
+    public Rectangle getBounds() {
+        return new Rectangle(x, y, width, height);
+    }
+
+    @Override
+    public void copyTo(final Rectangle other) {
         if (other == null) {
             return;
         }
@@ -97,7 +168,7 @@ public class Rectangle implements Serializable, Comparable<Rectangle>, Copyable<
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof Rectangle)) return false;
 
@@ -114,7 +185,7 @@ public class Rectangle implements Serializable, Comparable<Rectangle>, Copyable<
     }
 
     @Override
-    public int compareTo(Rectangle that) {
+    public int compareTo(final Rectangle that) {
         if (this == that) {
             return EqualityBuilder.EQUALITY;
         }

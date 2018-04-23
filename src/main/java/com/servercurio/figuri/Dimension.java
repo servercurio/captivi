@@ -40,7 +40,7 @@ public class Dimension implements Serializable, Cloneable, Comparable<Dimension>
         this(0, 0);
     }
 
-    public Dimension(double width, double height) {
+    public Dimension(final double width, final double height) {
         this.width = width;
         this.height = height;
     }
@@ -49,7 +49,7 @@ public class Dimension implements Serializable, Cloneable, Comparable<Dimension>
         return width;
     }
 
-    public void setWidth(double width) {
+    public void setWidth(final double width) {
         this.width = width;
     }
 
@@ -57,7 +57,7 @@ public class Dimension implements Serializable, Cloneable, Comparable<Dimension>
         return height;
     }
 
-    public void setHeight(double height) {
+    public void setHeight(final double height) {
         this.height = height;
     }
 
@@ -86,7 +86,7 @@ public class Dimension implements Serializable, Cloneable, Comparable<Dimension>
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof Dimension)) return false;
 

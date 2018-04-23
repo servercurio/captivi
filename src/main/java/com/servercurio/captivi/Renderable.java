@@ -22,10 +22,12 @@
 
 package com.servercurio.captivi;
 
+import com.servercurio.figuri.planar.BoundingBox;
+
 import java.awt.Graphics2D;
 
 public interface Renderable {
 
-    void paint(Graphics2D g);
+    void paint(final Graphics2D g, final BoundingBox bounds);
 
 }

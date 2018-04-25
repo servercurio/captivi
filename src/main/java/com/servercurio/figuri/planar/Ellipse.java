@@ -22,7 +22,11 @@
 
 package com.servercurio.figuri.planar;
 
+import com.servercurio.comune.drawing.GraphicsState;
+
+import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 
 public class Ellipse extends Rectangle {
 
@@ -39,4 +43,60 @@ public class Ellipse extends Rectangle {
         super(x, y, width, height);
     }
 
+    @Override
+    public boolean contains(final double x, final double y) {
+        return new Ellipse2D.Double(getX(), getY(), getWidth(), getHeight()).contains(x, y);
+    }
+
+    @Override
+    public boolean contains(final Point point) {
+        if (point == null) {
+            throw new NullPointerException("point");
+        }
+
+        return contains(point.getX(), point.getY());
+    }
+
+    @Override
+    public boolean contains(final double x, final double y, final double w, final double h) {
+        return new Ellipse2D.Double(getX(), getY(), getWidth(), getHeight()).contains(x, y, w, h);
+    }
+
+    @Override
+    public boolean contains(final Rectangle rectangle) {
+        if (rectangle == null) {
+            throw new NullPointerException("rectangle");
+        }
+
+        return contains(rectangle.getX(), rectangle.getY(), rectangle.getWidth(), rectangle.getHeight());
+    }
+
+    @Override
+    public Rectangle getBounds() {
+        Rectangle2D r = new Ellipse2D.Double(getX(), getY(), getWidth(), getHeight()).getBounds2D();
+
+        return new Rectangle(r.getX(), r.getY(), r.getWidth(), r.getHeight());
+    }
+
+    @Override
+    public Rectangle copy() {
+        return new Ellipse(getX(), getY(), getWidth(), getHeight());
+    }
+
+    @Override
+    public void paint(final Graphics2D g, final BoundingBox bounds) {
+        GraphicsState stateMgr = new GraphicsState(g);
+        stateMgr.save();
+        stateMgr.apply(this);
+
+        Ellipse2D ellipse = new Ellipse2D.Double(getX(), getY(), getWidth(), getHeight());
+
+        if (isFilled()) {
+            g.fill(ellipse);
+        } else {
+            g.draw(ellipse);
+        }
+
+        stateMgr.restore();
+    }
 }

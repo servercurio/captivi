@@ -68,6 +68,6 @@ public interface EqualityBuilder<T, B extends Builder<T>> extends Builder<T> {
 
     B append(final Object[] lhs, final Object[] rhs);
 
-    B append(final Object[] lhs, final Object[] rhs, Comparator<?> comparator);
+    B append(final Object[] lhs, final Object[] rhs, final Comparator<?> comparator);
 
 }

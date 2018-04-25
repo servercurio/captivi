@@ -1,8 +1,8 @@
 /*
  *
- * File:		Copyable.java
- * Class:		com.servercurio.comune.util.Copyable
- * Modified:	3/29/18 12:28 AM
+ * File:		Aware.java
+ * Class:		com.servercurio.comune.Aware
+ * Modified:	4/25/18 12:51 AM
  *
  * Copyright 2018 Server Curio
  *
@@ -20,12 +20,7 @@
  *
  */
 
-package com.servercurio.comune.util;
+package com.servercurio.comune;
 
-public interface Copyable<T> {
-
-    void copyTo(final T other);
-
-    T copy();
-
+public interface Aware {
 }

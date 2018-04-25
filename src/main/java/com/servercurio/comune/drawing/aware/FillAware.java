@@ -1,8 +1,8 @@
 /*
  *
- * File:		Renderable.java
- * Class:		com.servercurio.captivi.Renderable
- * Modified:	3/28/18 10:51 PM
+ * File:		FillAware.java
+ * Class:		com.servercurio.comune.drawing.aware.FillAware
+ * Modified:	4/25/18 1:17 AM
  *
  * Copyright 2018 Server Curio
  *
@@ -20,14 +20,12 @@
  *
  */
 
-package com.servercurio.captivi;
+package com.servercurio.comune.drawing.aware;
 
-import com.servercurio.figuri.planar.BoundingBox;
+public interface FillAware {
 
-import java.awt.Graphics2D;
+    boolean isFilled();
 
-public interface Renderable {
-
-    void paint(final Graphics2D g, final BoundingBox bounds);
+    void setFilled(final boolean filled);
 
 }

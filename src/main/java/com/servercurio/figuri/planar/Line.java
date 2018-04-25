@@ -1,8 +1,8 @@
 /*
  *
- * File:		Point.java
- * Class:		com.servercurio.figuri.planar.Point
- * Modified:	3/29/18 12:36 AM
+ * File:		Line.java
+ * Class:		com.servercurio.figuri.planar.Line
+ * Modified:	4/24/18 11:55 PM
  *
  * Copyright 2018 Server Curio
  *
@@ -25,49 +25,64 @@ package com.servercurio.figuri.planar;
 import com.servercurio.comune.drawing.GraphicsState;
 import com.servercurio.comune.drawing.Renderable;
 import com.servercurio.comune.drawing.aware.ColorAware;
+import com.servercurio.comune.drawing.aware.StrokeAware;
 import com.servercurio.comune.util.CompareToBuilder;
 import com.servercurio.comune.util.Copyable;
 import com.servercurio.comune.util.EqualityBuilder;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Objects;
 
-public class Point implements Shape, Comparable<Point>, Copyable<Point>, Renderable, ColorAware {
+public class Line implements Shape, Copyable<Line>, Comparable<Line>, Renderable, ColorAware, StrokeAware {
 
-    private static final long serialVersionUID = 1457811866258607528L;
+    private static final long serialVersionUID = -99135311515440002L;
 
-    private double x;
-    private double y;
+    private Point pointA;
+    private Point pointB;
 
     private Color backgroundColor;
     private Color foregroundColor;
+    private Stroke stroke;
 
-    public Point() {
+    public Line() {
+        this(new Point(), new Point());
     }
 
-    public Point(final double x, final double y) {
-        this.x = x;
-        this.y = y;
+    public Line(final double xA, final double yA, final double xB, final double yB) {
+        this(new Point(xA, yA), new Point(xB, yB));
     }
 
-    public double getX() {
-        return x;
+    public Line(final Point pointA, final Point pointB) {
+        if (pointA == null) {
+            throw new NullPointerException("pointA");
+        }
+
+        if (pointB == null) {
+            throw new NullPointerException("pointB");
+        }
+
+        this.pointA = pointA;
+        this.pointB = pointB;
     }
 
-    public void setX(final double x) {
-        this.x = x;
+    public Point getPointA() {
+        return pointA;
     }
 
-    public double getY() {
-        return y;
+    public void setPointA(final Point pointA) {
+        this.pointA = pointA;
     }
 
-    public void setY(final double y) {
-        this.y = y;
+    public Point getPointB() {
+        return pointB;
+    }
+
+    public void setPointB(final Point pointB) {
+        this.pointB = pointB;
     }
 
     @Override
@@ -90,25 +105,34 @@ public class Point implements Shape, Comparable<Point>, Copyable<Point>, Rendera
         this.foregroundColor = foregroundColor;
     }
 
-    public double distance(Point point) {
-        if (point == null) {
-            throw new NullPointerException("point");
-        }
-
-        return new Point2D.Double(this.x, this.y).distance(point.getX(), point.getY());
+    @Override
+    public Stroke getStroke() {
+        return stroke;
     }
 
-    public double distanceSquare(Point point) {
-        if (point == null) {
-            throw new NullPointerException("point");
+    @Override
+    public void setStroke(final Stroke stroke) {
+        this.stroke = stroke;
+    }
+
+    @Override
+    public void copyTo(final Line other) {
+        if (other == null) {
+            return;
         }
 
-        return new Point2D.Double(this.x, this.y).distanceSq(point.getX(), point.getY());
+        other.pointA = pointA.copy();
+        other.pointB = pointB.copy();
+    }
+
+    @Override
+    public Line copy() {
+        return new Line(pointA, pointB);
     }
 
     @Override
     public boolean contains(final double x, final double y) {
-        return false;
+        return new Line2D.Double(pointA.getX(), pointA.getY(), pointB.getX(), pointB.getY()).contains(x, y);
     }
 
     @Override
@@ -122,7 +146,7 @@ public class Point implements Shape, Comparable<Point>, Copyable<Point>, Rendera
 
     @Override
     public boolean contains(final double x, final double y, final double w, final double h) {
-        return false;
+        return new Line2D.Double(pointA.getX(), pointA.getY(), pointB.getX(), pointB.getY()).contains(x, y, w, h);
     }
 
     @Override
@@ -136,7 +160,9 @@ public class Point implements Shape, Comparable<Point>, Copyable<Point>, Rendera
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle(x, y, 1, 1);
+        Rectangle2D r = new Line2D.Double(pointA.getX(), pointA.getY(), pointB.getX(), pointB.getY()).getBounds2D();
+
+        return new Rectangle(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
 
     @Override
@@ -145,44 +171,29 @@ public class Point implements Shape, Comparable<Point>, Copyable<Point>, Rendera
         stateMgr.save();
         stateMgr.apply(this);
 
-        Line2D line = new Line2D.Double(x, y, x, y);
+        Line2D line = new Line2D.Double(pointA.getX(), pointA.getY(), pointB.getX(), pointB.getY());
         g.draw(line);
 
         stateMgr.restore();
     }
 
     @Override
-    public void copyTo(final Point other) {
-        if (other == null) {
-            return;
-        }
-
-        other.x = x;
-        other.y = y;
-    }
-
-    @Override
-    public Point copy() {
-        return new Point(x, y);
-    }
-
-    @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
-        if (!(o instanceof Point)) return false;
+        if (!(o instanceof Line)) return false;
 
-        Point point = (Point) o;
-        return Double.compare(point.x, x) == 0 &&
-                Double.compare(point.y, y) == 0;
+        Line line = (Line) o;
+        return Objects.equals(line.pointA, pointA) &&
+                Objects.equals(line.pointB, pointB);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y);
+        return Objects.hash(pointA, pointB);
     }
 
     @Override
-    public int compareTo(final Point that) {
+    public int compareTo(final Line that) {
         if (this == that) {
             return EqualityBuilder.EQUALITY;
         }
@@ -192,8 +203,8 @@ public class Point implements Shape, Comparable<Point>, Copyable<Point>, Rendera
         }
 
         return new CompareToBuilder()
-                .append(that.x, x)
-                .append(that.y, y)
+                .append(that.pointA, pointA)
+                .append(that.pointB, pointB)
                 .build();
     }
 }

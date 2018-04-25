@@ -1,8 +1,8 @@
 /*
  *
- * File:		Copyable.java
- * Class:		com.servercurio.comune.util.Copyable
- * Modified:	3/29/18 12:28 AM
+ * File:		Renderable.java
+ * Class:		com.servercurio.comune.drawing.Renderable
+ * Modified:	4/3/18 6:49 PM
  *
  * Copyright 2018 Server Curio
  *
@@ -20,12 +20,14 @@
  *
  */
 
-package com.servercurio.comune.util;
+package com.servercurio.comune.drawing;
 
-public interface Copyable<T> {
+import com.servercurio.figuri.planar.BoundingBox;
 
-    void copyTo(final T other);
+import java.awt.Graphics2D;
 
-    T copy();
+public interface Renderable {
+
+    void paint(final Graphics2D g, final BoundingBox bounds);
 
 }

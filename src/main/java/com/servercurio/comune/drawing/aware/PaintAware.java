@@ -1,8 +1,8 @@
 /*
  *
- * File:		Copyable.java
- * Class:		com.servercurio.comune.util.Copyable
- * Modified:	3/29/18 12:28 AM
+ * File:		PaintAware.java
+ * Class:		com.servercurio.comune.drawing.aware.PaintAware
+ * Modified:	4/25/18 12:48 AM
  *
  * Copyright 2018 Server Curio
  *
@@ -20,12 +20,16 @@
  *
  */
 
-package com.servercurio.comune.util;
+package com.servercurio.comune.drawing.aware;
 
-public interface Copyable<T> {
+import com.servercurio.comune.Aware;
 
-    void copyTo(final T other);
+import java.awt.Paint;
 
-    T copy();
+public interface PaintAware extends Aware {
+
+    Paint getPaint();
+
+    void setPaint(final Paint paint);
 
 }

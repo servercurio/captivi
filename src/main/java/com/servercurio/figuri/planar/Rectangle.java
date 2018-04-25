@@ -22,16 +22,23 @@
 
 package com.servercurio.figuri.planar;
 
+import com.servercurio.comune.drawing.GraphicsState;
+import com.servercurio.comune.drawing.Renderable;
+import com.servercurio.comune.drawing.aware.ColorAware;
+import com.servercurio.comune.drawing.aware.FillAware;
+import com.servercurio.comune.drawing.aware.StrokeAware;
 import com.servercurio.comune.util.CompareToBuilder;
 import com.servercurio.comune.util.Copyable;
 import com.servercurio.comune.util.EqualityBuilder;
 import com.servercurio.figuri.Dimension;
 
-import java.awt.geom.Point2D;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.geom.Rectangle2D;
 import java.util.Objects;
 
-public class Rectangle implements Shape, Comparable<Rectangle>, Copyable<Rectangle> {
+public class Rectangle implements Shape, Comparable<Rectangle>, Copyable<Rectangle>, Renderable, StrokeAware, ColorAware, FillAware {
 
     private static final long serialVersionUID = 4815557825521106169L;
 
@@ -39,6 +46,12 @@ public class Rectangle implements Shape, Comparable<Rectangle>, Copyable<Rectang
     private double y;
     private double width;
     private double height;
+
+    private Color backgroundColor;
+    private Color foregroundColor;
+    private Stroke stroke;
+
+    private boolean filled;
 
     public Rectangle() {
         this(0, 0, 0, 0);
@@ -121,6 +134,45 @@ public class Rectangle implements Shape, Comparable<Rectangle>, Copyable<Rectang
         this.y = y;
     }
 
+    @Override
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    @Override
+    public void setBackgroundColor(final Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
+    @Override
+    public Color getForegroundColor() {
+        return foregroundColor;
+    }
+
+    @Override
+    public void setForegroundColor(final Color foregroundColor) {
+        this.foregroundColor = foregroundColor;
+    }
+
+    @Override
+    public Stroke getStroke() {
+        return stroke;
+    }
+
+    @Override
+    public void setStroke(final Stroke stroke) {
+        this.stroke = stroke;
+    }
+
+    @Override
+    public boolean isFilled() {
+        return filled;
+    }
+
+    @Override
+    public void setFilled(final boolean filled) {
+        this.filled = filled;
+    }
 
     @Override
     public boolean contains(final double x, final double y) {
@@ -152,8 +204,26 @@ public class Rectangle implements Shape, Comparable<Rectangle>, Copyable<Rectang
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle(x, y, width, height);
+        return copy();
     }
+
+    @Override
+    public void paint(final Graphics2D g, final BoundingBox bounds) {
+        GraphicsState stateMgr = new GraphicsState(g);
+        stateMgr.save();
+        stateMgr.apply(this);
+
+        Rectangle2D rectangle = new Rectangle2D.Double(x, y, width, height);
+
+        if (isFilled()) {
+            g.fill(rectangle);
+        } else {
+            g.draw(rectangle);
+        }
+
+        stateMgr.restore();
+    }
+
 
     @Override
     public void copyTo(final Rectangle other) {
@@ -165,6 +235,11 @@ public class Rectangle implements Shape, Comparable<Rectangle>, Copyable<Rectang
         other.y = y;
         other.width = width;
         other.height = height;
+    }
+
+    @Override
+    public Rectangle copy() {
+        return new Rectangle(x, y, width, height);
     }
 
     @Override

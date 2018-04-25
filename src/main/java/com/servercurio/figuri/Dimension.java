@@ -29,7 +29,7 @@ import com.servercurio.comune.util.EqualityBuilder;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Dimension implements Serializable, Cloneable, Comparable<Dimension>, Copyable<Dimension> {
+public class Dimension implements Serializable, Comparable<Dimension>, Copyable<Dimension> {
 
     private static final long serialVersionUID = -924346892445077352L;
 
@@ -83,6 +83,11 @@ public class Dimension implements Serializable, Cloneable, Comparable<Dimension>
 
         other.width = width;
         other.height = height;
+    }
+
+    @Override
+    public Dimension copy() {
+        return new Dimension(width, height);
     }
 
     @Override

@@ -1,8 +1,8 @@
 /*
  *
- * File:		Copyable.java
- * Class:		com.servercurio.comune.util.Copyable
- * Modified:	3/29/18 12:28 AM
+ * File:		ColorAware.java
+ * Class:		com.servercurio.comune.drawing.aware.ColorAware
+ * Modified:	4/25/18 12:44 AM
  *
  * Copyright 2018 Server Curio
  *
@@ -20,12 +20,20 @@
  *
  */
 
-package com.servercurio.comune.util;
+package com.servercurio.comune.drawing.aware;
 
-public interface Copyable<T> {
+import com.servercurio.comune.Aware;
 
-    void copyTo(final T other);
+import java.awt.Color;
 
-    T copy();
+public interface ColorAware extends Aware {
+
+    Color getBackgroundColor();
+
+    void setBackgroundColor(final Color backgroundColor);
+
+    Color getForegroundColor();
+
+    void setForegroundColor(final Color foregroundColor);
 
 }
